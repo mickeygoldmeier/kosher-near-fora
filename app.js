@@ -235,7 +235,10 @@ function probeTiles() {
   var url = tileUrl()
     .replace("{z}", "13").replace("{x}", "4092").replace("{y}", "2723").replace("{r}", "");
   fetch(url, { mode: "cors", cache: "no-store" })
-    .then(function (r) { if (!r.ok) mapNote(TILE_FAIL_MSG); })
+    .then(function (r) {
+      // The service worker swaps an error tile for a blank 200, so check its flag too.
+      if (!r.ok || r.headers.get("X-Tile-Unavailable")) mapNote(TILE_FAIL_MSG);
+    })
     .catch(function () { /* offline: cached tiles may still be fine, say nothing */ });
 }
 

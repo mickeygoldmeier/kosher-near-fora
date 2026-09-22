@@ -3,7 +3,7 @@
  * Vendored: Leaflet 1.9.4, leaflet.markercluster 1.5.3.
  * BUMP SHELL ON EVERY DEPLOY — it is what replaces the cached app.
  */
-var SHELL = "knf-shell-v3";
+var SHELL = "knf-shell-v4";
 var TILES = "knf-tiles-v1";          // never bumped; self-trimming
 
 var TILE_HOSTS  = ["tiles.stadiamaps.com", "basemaps.cartocdn.com"];
@@ -59,7 +59,12 @@ var BLANK_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9
 function blankTile() {
   var bin = atob(BLANK_PNG), bytes = new Uint8Array(bin.length);
   for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new Response(bytes, { status: 200, headers: { "Content-Type": "image/png" } });
+  // 200 so the <img> renders nothing rather than breaking, but flagged so the
+  // page's startup probe can still tell that tiles are unavailable.
+  return new Response(bytes, {
+    status: 200,
+    headers: { "Content-Type": "image/png", "X-Tile-Unavailable": "1" }
+  });
 }
 
 /* Trim lazily. cache.keys() on every put is O(n) per tile and stutters panning. */
