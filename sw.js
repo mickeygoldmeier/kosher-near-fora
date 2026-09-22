@@ -3,7 +3,7 @@
  * Vendored: Leaflet 1.9.4, leaflet.markercluster 1.5.3.
  * BUMP SHELL ON EVERY DEPLOY — it is what replaces the cached app.
  */
-var SHELL = "knf-shell-v4";
+var SHELL = "knf-shell-v5";
 var TILES = "knf-tiles-v1";          // never bumped; self-trimming
 
 var TILE_HOSTS  = ["tiles.stadiamaps.com", "basemaps.cartocdn.com"];
@@ -36,9 +36,17 @@ var PRECACHE = [
 
 self.addEventListener("install", function (e) {
   e.waitUntil(
-    caches.open(SHELL)
-      .then(function (c) { return c.addAll(PRECACHE); })
-      .then(function () { return self.skipWaiting(); })
+    caches.open(SHELL).then(function (c) {
+      // NOT cache.addAll: that honours the browser HTTP cache, and GitHub Pages
+      // serves assets with max-age=600, so a fresh install would happily precache
+      // the *previous* deploy's files. cache:"reload" forces the network.
+      return Promise.all(PRECACHE.map(function (u) {
+        return fetch(new Request(u, { cache: "reload" })).then(function (res) {
+          if (!res.ok) throw new Error("precache failed: " + u + " (" + res.status + ")");
+          return c.put(u, res);
+        });
+      }));
+    }).then(function () { return self.skipWaiting(); })
   );
 });
 
