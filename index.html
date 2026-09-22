@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kosher Near Melcombe Place</title>
+<meta name="description" content="Certified kosher food near Fora Melcombe Place, sorted by live distance.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1B5E4B" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E110F" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kosher NW1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192">
+<link rel="stylesheet" href="vendor/leaflet.css">
+<link rel="stylesheet" href="vendor/MarkerCluster.css">
+<link rel="stylesheet" href="vendor/MarkerCluster.Default.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <h1>Kosher Near Melcombe Place</h1>
+    <p class="sub">Certified-only, sorted by how far you actually are.</p>
+    <div class="origin-row">
+      <span class="origin-tag"><span class="dot" id="dot"></span>From <b id="originName">Fora, Melcombe Place</b></span>
+      <button class="locate" id="locBtn" type="button">Use my location</button>
+      <button class="reset" id="resetBtn" type="button" hidden>Back to Fora</button>
+    </div>
+    <div class="seg" role="tablist" aria-label="View">
+      <button id="tabList" type="button" role="tab" aria-selected="true" aria-controls="listView">List</button>
+      <button id="tabMap" type="button" role="tab" aria-selected="false" aria-controls="mapView">Map</button>
+    </div>
+    <div class="shabbat" id="shabbat">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span id="shabbatText"></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="controls">
+    <label class="sr-only" for="q">Search</label>
+    <input id="q" type="search" placeholder="Search a name, street or postcode" autocomplete="off">
+    <div class="chips" id="chips">
+      <button class="chip" type="button" aria-pressed="true"  data-f="all">Everything</button>
+      <button class="chip k-meat"  type="button" aria-pressed="false" data-f="meat">Meat</button>
+      <button class="chip k-dairy" type="button" aria-pressed="false" data-f="dairy">Dairy</button>
+      <button class="chip k-parev" type="button" aria-pressed="false" data-f="parev">Parev &amp; fish</button>
+      <button class="chip k-shop"  type="button" aria-pressed="false" data-f="super">Supermarkets</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="bake">Bakeries &amp; delis</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="walk">Walkable only</button>
+    </div>
+  </div>
+
+  <div id="listView" role="tabpanel" aria-labelledby="tabList"><div id="results"></div></div>
+
+  <div id="mapView" role="tabpanel" aria-labelledby="tabMap" hidden>
+    <div class="mapbox">
+      <div id="map"></div>
+      <div class="legend">
+        <span><i style="background:var(--meat)"></i>Meat</span>
+        <span><i style="background:var(--dairy)"></i>Dairy</span>
+        <span><i style="background:var(--parev)"></i>Parev &amp; fish</span>
+        <span><i style="background:var(--shop)"></i>Kosher grocery</span>
+        <span><i style="background:var(--pack)"></i>Supermarket aisle</span>
+        <span><i class="swatch-fora"></i>Fora</span>
+      </div>
+    </div>
+    <p class="map-note" id="mapNote"></p>
+    <p class="map-hint">Pinch to zoom, tap a pin for details. The filters and search above apply here too.</p>
+  </div>
+
+  <footer>
+    <h2>Where this comes from</h2>
+    <p>
+      Every place here is licensed by one of the UK kashrut authorities listed below &mdash; nothing is included on
+      reputation, and kosher-style or unsupervised vegetarian places are deliberately left out. Supervision changes
+      often, and a licence can lapse between visits. <b>Tap the badge on any listing</b> to open that authority's own
+      directory and confirm before you order.
+    </p>
+    <p>
+      Supermarket entries are a different thing and are labelled as such: the <b>products</b> carry their own hechsher,
+      the <b>store</b> is not supervised. Check each packet. Most Waitrose branches also stock KLBD-certified challah and
+      sliced rye from Buckingham Boulangerie, and a number of Hovis and Kingsmill loaves carry KLBD or Federation
+      certification wherever you buy them.
+    </p>
+    <ul class="src">
+      <li><a href="https://kosher.org.uk/kosher-places/restaurants/" target="_blank" rel="noopener">KLBD &mdash; Kosher London Beth Din</a><span>Restaurants, delis &amp; bakeries directory. The largest UK licensor.</span></li>
+      <li><a href="https://kfkosher.org/establishments-catering/" target="_blank" rel="noopener">KF Kosher &mdash; Kehillas Federation</a><span>Licensed establishments &amp; catering. Supervises Reuben's on Baker Street.</span></li>
+      <li><a href="https://www.ska.org.uk/licensees" target="_blank" rel="noopener">SKA &mdash; Sephardi Kashrut Authority</a><span>Licensee list for the S&amp;P Sephardi Community.</span></li>
+      <li><a href="https://www.marblearch.org.uk/visit-us/central-london-kosher-guide/" target="_blank" rel="noopener">Western Marble Arch Synagogue</a><span>Central London kosher guide &mdash; source for the supermarket kosher fridges.</span></li>
+      <li><a href="https://www.chabadw1.org/templates/articlecco_cdo/aid/2946750/jewish/Kosher-food-in-Central-London.htm" target="_blank" rel="noopener">Chabad of Bloomsbury &mdash; Central London</a><span>Corroborates the West End addresses and the Oxford Street food halls.</span></li>
+    </ul>
+    <p class="stamp">
+      Checked against the above directories on 22 September 2026.
+      Distances are <b>walking distances</b> along real streets, routed over OpenStreetMap data from Melcombe Place &mdash;
+      not straight lines, which understate a London walk by roughly a third. Anything longer than a 35&nbsp;minute walk is
+      quoted as an approximate door-to-door tube or bus journey instead. When you share your location the routes no longer
+      apply, so figures are estimated from the straight line and marked with &ldquo;&asymp;&rdquo;.
+      Map data &copy; OpenStreetMap contributors.
+    </p>
+  </footer>
+</div>
+
+<script src="vendor/leaflet.js"></script>
+<script src="vendor/leaflet.markercluster.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

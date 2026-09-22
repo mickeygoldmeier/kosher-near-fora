@@ -1,0 +1,83 @@
+/* Venue data for Kosher Near Melcombe Place.
+ * Every entry is licensed by one of the UK kashrut authorities in SOURCES.
+ * Nothing is listed on reputation alone. Last verified 22 September 2026.
+ */
+const FORA = {lat:51.52279, lng:-0.16290, name:"Fora, Melcombe Place"};
+
+const SOURCES = {
+  klbd_r:["KLBD","https://kosher.org.uk/kosher-places/restaurants/"],
+  klbd_d:["KLBD","https://kosher.org.uk/kosher-places/delis-shops-pop-ups/"],
+  klbd_b:["KLBD","https://kosher.org.uk/kosher-places/bakeries/"],
+  kf:["KF Kosher","https://kfkosher.org/establishments-catering/"],
+  ska:["SKA","https://www.ska.org.uk/licensees"],
+  wma:["Packaged goods","https://www.marblearch.org.uk/visit-us/central-london-kosher-guide/"]
+};
+
+const VENUES = [
+  {n:"Reuben's Deli & Restaurant",k:"Deli & restaurant",t:"meat",lat:51.51982,lng:-0.15684,a:"79 Baker Street",pc:"W1U 6RG",s:"kf",tel:"02074860035",h:"Sun–Thu 11:30–22:00 · Fri 11:30–15:00 · Sat closed",note:"The only kosher restaurant in the West End. Reopened Sept 2025 after two fires.",wd:741,wt:535},
+  {n:"Tony Page Marylebone",k:"Restaurant",t:"meat",lat:51.52068,lng:-0.15522,a:"26 Paddington Street",pc:"W1U 5QY",s:"klbd_r",tel:"02071398500",h:"Sun–Thu lunch & dinner · closed Fri–Sat",note:"Sit-down fine dining on the corner of Chiltern Street. Book ahead.",wd:835,wt:594},
+  {n:"Waitrose Edgware Road",k:"Supermarket · kosher fridge",t:"pack",lat:51.51773,lng:-0.16622,a:"168–176 Edgware Road",pc:"W2 2DS",s:"wma",note:"Chilled kosher section — herring, falafel, cheese, chopped liver. Store is not supervised; each product carries its own hechsher.",wd:855,wt:616},
+  {n:"Waitrose Marylebone",k:"Supermarket · kosher fridge",t:"pack",lat:51.51866,lng:-0.15191,a:"98–101 Marylebone High Street",pc:"W1U 4RZ",s:"wma",tel:"02079354787",note:"Kosher fridges plus dried goods, and the KLBD challah and rye. The closest proper kosher shop to the desk.",wd:1266,wt:899},
+  {n:"1070 Kitchen",k:"Grab & go · Selfridges Food Hall",t:"meat",lat:51.5146,lng:-0.15282,a:"400 Oxford Street",pc:"W1A 1AB",s:"klbd_d",tel:"02076242013",note:"Sandwiches, salad boxes and soups under KLBD, glatt. The food hall also carries Cohen's challah and KLBD vegan doughnuts.",wd:1546,wt:1103},
+  {n:"John Lewis Food Hall",k:"Supermarket · kosher section",t:"pack",lat:51.51544,lng:-0.14522,a:"300 Oxford Street",pc:"W1A 1EX",s:"wma",tel:"02076297711",note:"Waitrose-run food hall with a kosher section. Handy if you are already on Oxford Street.",wd:2071,wt:1496},
+
+  {n:"Mazal",k:"Restaurant",t:"meat",lat:51.54133,lng:-0.14663,a:"3 Camden Lock Place",pc:"NW1 8AF",s:"kf",note:"In Camden Lock market — the closest kosher hot food outside the West End.",wd:3171,wt:2310},
+  {n:"Moss & Maple",k:"Restaurant",t:"meat",lat:51.54304,lng:-0.17932,a:"51 Fairfax Road",pc:"NW6 4WL",s:"klbd_r",tel:"02036120641",note:"Swiss Cottage — roughly 10 minutes on the Jubilee line from Baker Street.",wd:2959,wt:2156},
+  {n:"Tish",k:"Restaurant",t:"meat",lat:51.5509,lng:-0.16499,a:"196 Haverstock Hill",pc:"NW3 2AG",s:"klbd_r",tel:"02074313828",note:"Belsize Park. Modern Jewish cooking; the nicest room of the near options.",wd:3918,wt:2956},
+  {n:"Central Kosher",k:"Kosher grocery · Chabad Belgravia",t:"shop",lat:51.49641,lng:-0.14635,a:"44 Grosvenor Gardens",pc:"SW1W 0EB",s:"wma",note:"Groceries and provisions, and delivers to hotels. Call or email ahead — not a walk-in shop.",wd:3539,wt:2644},
+  {n:"JW3 Cafe",k:"Cafe",t:"dairy",lat:51.5512,lng:-0.18478,a:"341–351 Finchley Road",pc:"NW3 6ET",s:"ska",note:"Inside the JW3 centre. Easy stop on the way up the Finchley Road.",wd:4165,wt:3088},
+
+  {n:"Novellino",k:"Restaurant",t:"dairy",lat:51.57268,lng:-0.19938,a:"103 Golders Green Road",pc:"NW11 8EN",s:"klbd_r",tel:"02084587273",wd:7116,wt:5173},
+  {n:"Hummus Bar",k:"Restaurant",t:"meat",lat:51.57293,lng:-0.19881,a:"82 Golders Green Road",pc:"NW11 8LN",s:"klbd_r",tel:"02038723777",wd:7109,wt:5171},
+  {n:"Booya Gelato",k:"Ice cream",t:"dairy",lat:51.57285,lng:-0.19895,a:"90 Golders Green Road",pc:"NW11 8LN",s:"klbd_d",tel:"07915999821",wd:7093,wt:5158},
+  {n:"Eli's Pizza",k:"Pizzeria",t:"dairy",lat:51.57333,lng:-0.19924,a:"2a Hoop Lane",pc:"NW11 8JS",s:"klbd_r",tel:"02037615151",wd:7162,wt:5208},
+  {n:"Beit Café",k:"Cafe",t:"dairy",lat:51.57338,lng:-0.20049,a:"119 Golders Green Road",pc:"NW11 8HR",s:"klbd_r",tel:"02082093592",wd:7251,wt:5265},
+  {n:"Novellino Bistro",k:"Bistro",t:"meat",lat:51.57340,lng:-0.20037,a:"111a–113 Golders Green Road",pc:"NW11 8HR",s:"klbd_r",tel:"02082485678",wd:7211,wt:5237},
+  {n:"Tuk Tuk",k:"Thai restaurant",t:"meat",lat:51.57352,lng:-0.20056,a:"115 Golders Green Road",pc:"NW11 8HR",s:"klbd_r",tel:"02081910055",wd:7229,wt:5249},
+  {n:"Darna",k:"Restaurant",t:"meat",lat:51.57344,lng:-0.19970,a:"96 Golders Green Road",pc:"NW11 8HB",s:"kf",wd:7204,wt:5235},
+  {n:"SurFin Poke",k:"Poke bar",t:"parev",lat:51.57392,lng:-0.20046,a:"98a Golders Green Road",pc:"NW11 8HB",s:"klbd_r",tel:"02089221640",wd:7320,wt:5317},
+  {n:"Sushi Haven",k:"Sushi",t:"parev",lat:51.57386,lng:-0.20060,a:"114a Golders Green Road",pc:"NW11 8HB",s:"klbd_r",tel:"02081230555",wd:7258,wt:5267},
+  {n:"Carmelli",k:"Bakery",t:"parev",lat:51.57398,lng:-0.20032,a:"126–128 Golders Green Road",pc:"NW11 8HB",s:"klbd_b",tel:"02084552074",note:"The late-night institution — bagels well past midnight most of the week.",wd:7318,wt:5315},
+  {n:"Kosher Deli",k:"Deli",t:"meat",lat:51.57404,lng:-0.20070,a:"132 Golders Green Road",pc:"NW11 8HB",s:"klbd_d",tel:"02087316450",wd:7276,wt:5278},
+  {n:"Taboon",k:"Bakery & cafe",t:"dairy",lat:51.57824,lng:-0.20734,a:"17 Russell Parade",pc:"NW11 9NN",s:"klbd_r",tel:"02084557451",wd:7939,wt:5734},
+  {n:"Kosher Kingdom",k:"Kosher supermarket",t:"shop",lat:51.57818,lng:-0.20748,a:"7 Russell Parade, Golders Green Road",pc:"NW11 9NN",s:"klbd_d",tel:"02084551429",h:"Sun–Tue 07:00–22:00 · Wed–Thu 07:00–24:00 · Fri 07:00–18:30 · Sat closed",note:"The big one. Full kosher supermarket — meat, dairy, bakery, groceries, all under supervision.",wd:7937,wt:5733},
+  {n:"Menachem's",k:"Butcher",t:"meat",lat:51.57830,lng:-0.20722,a:"15 Russell Parade",pc:"NW11 9NN",s:"ska",tel:"02082018630",note:"Chalak Bet Yosef.",wd:7941,wt:5736},
+  {n:"Coco Bakery",k:"Bakery",t:"parev",lat:51.57836,lng:-0.20745,a:"20 Russell Parade",pc:"NW11 9NN",s:"klbd_b",tel:"02084588984",wd:7955,wt:5746},
+  {n:"Munch 'N Crunch",k:"Bakery",t:"parev",lat:51.57812,lng:-0.20726,a:"7 Russell Parade",pc:"NW11 9NN",s:"klbd_b",tel:"02084586888",wd:7922,wt:5729},
+  {n:"Leon's Fruit Shop",k:"Greengrocer",t:"parev",lat:51.57808,lng:-0.20740,a:"5 Russell Parade",pc:"NW11 9NN",s:"klbd_d",tel:"02084553330",wd:7926,wt:5725},
+  {n:"Grodz",k:"Bakery",t:"parev",lat:51.57786,lng:-0.20762,a:"223 Golders Green Road",pc:"NW11 9ES",s:"klbd_b",tel:"02089581205",wd:7946,wt:5739},
+  {n:"Slice",k:"Pizzeria",t:"dairy",lat:51.57988,lng:-0.20979,a:"6 Princes Parade, Golders Green Road",pc:"NW11 9PS",s:"klbd_r",tel:"02039121100",wd:8175,wt:5895},
+
+  {n:"Shnitzelhaus",k:"Restaurant",t:"meat",lat:51.58124,lng:-0.19834,a:"756 Finchley Road",pc:"NW11 7TH",s:"klbd_r",tel:"02080162857",wd:7893,wt:5722},
+  {n:"Bread Temple Fortune",k:"Bakery & cafe",t:"dairy",lat:51.58214,lng:-0.1996,a:"1 Bridge Lane",pc:"NW11 0EA",s:"klbd_r",tel:"02084559340",wd:8056,wt:5846},
+  {n:"Burger Bar",k:"Burgers",t:"meat",lat:51.58206,lng:-0.19948,a:"1 Bridge Lane",pc:"NW11 0EA",s:"klbd_r",tel:"02084558080",wd:8025,wt:5823},
+  {n:"Crème de la Crème",k:"Bakery",t:"parev",lat:51.58268,lng:-0.19997,a:"5 Temple Fortune Parade",pc:"NW11 0QN",s:"klbd_b",tel:"02084589090",wd:8090,wt:5873},
+  {n:"Kosher Deli",k:"Deli",t:"meat",lat:51.58307,lng:-0.19982,a:"9a Hallswelle Parade, Finchley Road",pc:"NW11 0QS",s:"klbd_d",tel:"02084587933",wd:8114,wt:5897},
+  {n:"Sam Stoller & Son",k:"Fishmonger",t:"parev",lat:51.58298,lng:-0.19995,a:"28 Temple Fortune Parade",pc:"NW11 0QS",s:"ska",wd:8150,wt:5922},
+  {n:"Habiba's Smokehouse",k:"Restaurant",t:"meat",lat:51.5846,lng:-0.20019,a:"1179 Finchley Road",pc:"NW11 0AA",s:"klbd_r",tel:"02076254504",wd:8314,wt:6048},
+  {n:"Daniels Bagel Bakery",k:"Bakery",t:"parev",lat:51.58546,lng:-0.20016,a:"12–14 Hallswelle Parade",pc:"NW11 0DL",s:"klbd_b",tel:"02084555826",wd:8414,wt:6113},
+  {n:"Kasa Bar & Grill",k:"Restaurant",t:"meat",lat:51.58564,lng:-0.18269,a:"30 The Market Place",pc:"NW11 6JJ",s:"klbd_r",tel:"02034413527",wd:8294,wt:6132},
+  {n:"Sushi Hinoki",k:"Sushi · takeaway only",t:"parev",lat:51.58609,lng:-0.18248,a:"31 The Market Place",pc:"NW11 6JY",s:"klbd_r",tel:"02036632975",wd:8329,wt:6166},
+
+  {n:"Bonjour",k:"Bakery",t:"parev",lat:51.58496,lng:-0.21912,a:"78–80 Brent Street",pc:"NW4 2ES",s:"klbd_b",tel:"02082038848",wd:9049,wt:6561},
+  {n:"Bagels Bar",k:"Cafe",t:"dairy",lat:51.58503,lng:-0.21901,a:"84 Brent Street",pc:"NW4 2ES",s:"klbd_r",tel:"02082026540",wd:9076,wt:6581},
+  {n:"Bagels Bar Grill House",k:"Grill",t:"meat",lat:51.58510,lng:-0.21890,a:"86 Brent Street",pc:"NW4 2ES",s:"klbd_r",tel:"02082025575",wd:9079,wt:6583},
+  {n:"Hendon Park Cafe",k:"Cafe",t:"dairy",lat:51.58315,lng:-0.22475,a:"3 Queen's Road",pc:"NW4 2TG",s:"ska",wd:9073,wt:6614},
+  {n:"Bread Hendon",k:"Bakery & cafe",t:"dairy",lat:51.58568,lng:-0.21955,a:"96 Brent Street",pc:"NW4 2HH",s:"klbd_r",wd:9158,wt:6643},
+  {n:"Portoberry",k:"Cafe",t:"dairy",lat:51.58582,lng:-0.21971,a:"106 Brent Street",pc:"NW4 2HH",s:"klbd_r",tel:"02081911217",wd:9154,wt:6642},
+  {n:"Tapuach",k:"Deli & grocery",t:"shop",lat:51.58575,lng:-0.21963,a:"108–110 Brent Street",pc:"NW4 2HH",s:"klbd_d",tel:"02082025700",wd:9145,wt:6636},
+  {n:"White Fish",k:"Fish restaurant",t:"parev",lat:51.58632,lng:-0.21904,a:"10–12 Bell Lane",pc:"NW4 2AD",s:"klbd_r",tel:"02082028780",wd:9273,wt:6723},
+  {n:"Kosher Deli",k:"Deli",t:"meat",lat:51.58596,lng:-0.22045,a:"43 Brent Street",pc:"NW4 2EA",s:"klbd_d",tel:"02082020402",wd:9379,wt:6806},
+  {n:"Allenby Market",k:"Kosher grocery",t:"shop",lat:51.58608,lng:-0.22029,a:"55 Brent Street",pc:"NW4 2EA",s:"klbd_d",tel:"02081910770",wd:9210,wt:6686},
+  {n:"Sushi Haven",k:"Sushi",t:"parev",lat:51.58602,lng:-0.22037,a:"57a Brent Street",pc:"NW4 2EA",s:"klbd_r",tel:"02081230555",wd:9205,wt:6682},
+  {n:"White House Express",k:"Takeaway",t:"meat",lat:51.58612,lng:-0.22048,a:"63 Brent Street",pc:"NW4 2EA",s:"klbd_r",tel:"02082032427",wd:9218,wt:6692},
+  {n:"Manna Deli",k:"Deli",t:"meat",lat:51.58747,lng:-0.22065,a:"146 Brent Street",pc:"NW4 2DR",s:"klbd_d",tel:"02082017575",wd:9349,wt:6794},
+  {n:"Hummus Bar",k:"Restaurant",t:"meat",lat:51.58749,lng:-0.22121,a:"105 Brent Street",pc:"NW4 2DX",s:"klbd_r",tel:"02039485005",wd:9442,wt:6862},
+  {n:"Mr Baker",k:"Bakery & cafe",t:"dairy",lat:51.58756,lng:-0.22108,a:"119–121 Brent Street",pc:"NW4 2DX",s:"klbd_r",tel:"02082026845",wd:9384,wt:6822},
+  {n:"Sami's",k:"Restaurant",t:"meat",lat:51.58863,lng:-0.22173,a:"157 Brent Street",pc:"NW4 4DJ",s:"klbd_r",tel:"02082038088",wd:9509,wt:6903},
+  {n:"Kaifeng",k:"Chinese restaurant",t:"meat",lat:51.58984,lng:-0.22382,a:"51 Church Road",pc:"NW4 4DU",s:"klbd_r",tel:"02082037888",wd:9766,wt:7097},
+  {n:"Hendon Bagel Bakery",k:"Bakery",t:"parev",lat:51.58978,lng:-0.22370,a:"55–57 Church Road",pc:"NW4 4DU",s:"klbd_b",tel:"02082036919",wd:9757,wt:7088},
+  {n:"Kosher Edge",k:"Kosher supermarket",t:"shop",lat:51.61578,lng:-0.27644,a:"15–19 Edgwarebury Lane, Edgware",pc:"HA8 8LH",s:"klbd_d",tel:"02089583444",wd:13998,wt:10146}
+];
+
+window.KNF = { FORA, SOURCES, VENUES };
