@@ -12,6 +12,9 @@ A static, installable web app. No build step, no framework, no bundler.
 - **List view** grouped into distance bands (walk from the desk / one stop out / the north-west cluster),
   with filters for meat, dairy, parev & fish, supermarkets and bakeries & delis.
 - **Map view** — Leaflet with real street tiles, colour-coded pins and clustering.
+- **Walking routes drawn on the map.** Tap **Show route** on any venue and the actual pedestrian
+  route appears, following real streets. **Google Maps** is kept alongside it for turn-by-turn
+  navigation and live traffic.
 - **Real walking distances**, routed over OpenStreetMap pedestrian data from Melcombe Place — not
   straight lines. Straight-line distance understates a walk here by about 38% (Reuben's is 534 m as the
   crow flies but 741 m on foot), which is why the numbers now agree with the map.
@@ -52,9 +55,17 @@ On iOS it is Share → **Add to Home Screen** (no install prompt; Safari does no
 
 ## How distances are calculated
 
-Each venue carries `wd` (metres) and `wt` (seconds) on the real pedestrian network from Fora,
-precomputed with [Valhalla](https://valhalla1.openstreetmap.de/) over OpenStreetMap data and baked into
-`data.js`. No routing happens at runtime, so it works offline.
+Each venue carries `wd` (metres), `wt` (seconds) and `rt` (the route geometry as an encoded
+polyline, precision 5) for the real pedestrian network from Fora, precomputed over OpenStreetMap data
+and baked into `data.js`. No routing happens at runtime, so distances *and the drawn route* work
+offline. The 60 routes cost about 12 KB after simplifying to ~3 m tolerance (27,954 points down to
+5,047), and the simplified geometry still matches the stored distances to within 0.5%.
+
+Once you share your location the baked routes no longer start from the right place, so **Show route**
+calls the Stadia [Routing API](https://docs.stadiamaps.com/routing/standard-routing/)
+(`https://api.stadiamaps.com/route/v1`, `pedestrian` profile) instead. Stadia hosts Valhalla, so it is
+the same engine, and the same domain allowlist covers it — no key in the repo. Its response shape is
+polyline precision 6. If the call fails the route is skipped and the Google Maps button still works.
 
 Anything over a 35-minute walk is quoted as an approximate door-to-door tube/bus journey at 12 km/h
 (inner London, including both walking legs) rather than an unusable walking time.

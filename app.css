@@ -168,13 +168,16 @@ a.hechsher svg{opacity:.6}
 .v-addr{color:var(--muted); font-size:.85rem; margin:0}
 .v-addr .pc{font-family:"IBM Plex Mono",monospace; font-size:.79rem}
 .v-note{font-size:.8rem; color:var(--muted); font-style:italic; border-left:2px solid var(--line-strong); padding-left:9px; margin:0}
-.v-acts{display:flex; gap:8px; margin-top:auto; padding-top:3px}
-.v-acts a{
-  flex:1; text-align:center; font-size:.82rem; font-weight:600; text-decoration:none;
+.v-acts{display:flex; flex-wrap:wrap; gap:8px; margin-top:auto; padding-top:3px}
+.v-acts a,.v-acts button{
+  flex:1 1 90px; text-align:center; font:inherit; font-size:.82rem; font-weight:600; text-decoration:none;
   border:1px solid var(--line-strong); border-radius:8px; padding:7px 10px; color:var(--ink);
+  background:none; cursor:pointer;
 }
-.v-acts a:hover{border-color:var(--accent); color:var(--accent)}
+.v-acts a:hover,.v-acts button:hover{border-color:var(--accent); color:var(--accent)}
 .v-acts a.primary{background:var(--accent-soft); border-color:transparent; color:var(--accent)}
+.v-acts .route-btn{background:var(--accent); border-color:transparent; color:var(--on-accent)}
+.v-acts .route-btn:hover{filter:brightness(1.08); color:var(--on-accent)}
 
 /* ---------- map ---------- */
 #mapView[hidden]{display:none!important}

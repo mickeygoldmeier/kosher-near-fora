@@ -3,7 +3,7 @@
  * Vendored: Leaflet 1.9.4, leaflet.markercluster 1.5.3.
  * BUMP SHELL ON EVERY DEPLOY — it is what replaces the cached app.
  */
-var SHELL = "knf-shell-v5";
+var SHELL = "knf-shell-v6";
 var TILES = "knf-tiles-v1";          // never bumped; self-trimming
 
 var TILE_HOSTS  = ["tiles.stadiamaps.com", "basemaps.cartocdn.com"];

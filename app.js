@@ -34,6 +34,12 @@ var TILE_PROVIDERS = {
 };
 var PROVIDER = TILE_PROVIDERS.stadia;
 
+/* Routing runs on the same account as the tiles — Stadia hosts Valhalla, so the
+ * domain allowlist covers both and no key goes in this repo.
+ * Routes from Fora are precomputed into data.js (v.rt), so the common case needs
+ * no network at all; this endpoint is only used once you share your location. */
+var ROUTE_URL = "https://api.stadiamaps.com/route/v1";
+
 /* --------------------------------------------------------------- state --- */
 var origin = { lat: FORA.lat, lng: FORA.lng };
 var filter = "all", query = "", view = "list";
@@ -141,8 +147,10 @@ function bodyFor(v) {
     (v.h ? '<p class="v-note">' + esc(v.h) + "</p>" : "") +
     (v.note ? '<p class="v-note">' + esc(v.note) + "</p>" : "") +
     '<div class="v-acts">' +
+      // in-app walking line, and the handoff to Google Maps for turn-by-turn
+      '<button class="route-btn" type="button" data-route="' + V.indexOf(v) + '">Show route</button>' +
       '<a class="primary" href="https://www.google.com/maps/dir/?api=1&destination=' + q +
-        '" target="_blank" rel="noopener">Directions</a>' +
+        '&travelmode=walking" target="_blank" rel="noopener">Google Maps</a>' +
       (v.tel ? '<a href="tel:' + v.tel + '">Call</a>' : "") +
     "</div>";
 }
@@ -281,6 +289,8 @@ function buildMap() {
                "<p class='v-addr'>Distances are measured from here unless you share your location.</p>");
   foraMarker.addTo(map);
 
+  map.on("click", function () { clearRoute(); mapNote(""); });
+
   map.setView([51.5455, -0.1855], 12);
   fitToVenues(visible());
 }
@@ -305,6 +315,78 @@ function renderMarkers(shown) {
   });
 }
 
+/* ---------------------------------------------------------------- route ---
+ * Routes from Fora ship with the app as encoded polylines (precision 5), so
+ * tapping Route works instantly and offline. From a live position we ask Stadia
+ * instead, and its Valhalla response uses precision 6.
+ */
+function decodePolyline(str, precision) {
+  var factor = Math.pow(10, precision), index = 0, lat = 0, lng = 0, out = [];
+  while (index < str.length) {
+    var shift, result, b;
+    shift = result = 0;
+    do { b = str.charCodeAt(index++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+    lat += (result & 1) ? ~(result >> 1) : (result >> 1);
+    shift = result = 0;
+    do { b = str.charCodeAt(index++) - 63; result |= (b & 0x1f) << shift; shift += 5; } while (b >= 0x20);
+    lng += (result & 1) ? ~(result >> 1) : (result >> 1);
+    out.push([lat / factor, lng / factor]);
+  }
+  return out;
+}
+
+var routeCasing = null, routeLine = null;
+function clearRoute() {
+  [routeCasing, routeLine].forEach(function (l) { if (l) map.removeLayer(l); });
+  routeCasing = routeLine = null;
+}
+function drawRoute(pts) {
+  clearRoute();
+  // a casing under the line keeps it readable over both basemaps
+  routeCasing = L.polyline(pts, { color: "#000", opacity: .35, weight: 9, lineJoin: "round" }).addTo(map);
+  routeLine = L.polyline(pts, {
+    color: getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#1B5E4B",
+    weight: 5, opacity: .95, lineJoin: "round", dashArray: null
+  }).addTo(map);
+  map.fitBounds(L.latLngBounds(pts).pad(0.15));
+}
+
+function showRoute(idx) {
+  var v = V[idx];
+  setView("map");
+  setTimeout(function () {                       // not rAF: it never fires in a hidden tab
+    map.invalidateSize();
+
+    if (atFora() && v.rt) {                       // precomputed: instant, offline
+      drawRoute(decodePolyline(v.rt, 5));
+      mapNote("Walking route to " + v.n + " — " + fmtDist(v._m) + ", " + fmtTime(v) + ".");
+      return;
+    }
+    mapNote("Working out the route…");
+    fetch(ROUTE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        locations: [{ lat: origin.lat, lon: origin.lng }, { lat: v.lat, lon: v.lng }],
+        costing: "pedestrian",
+        directions_options: { units: "kilometers" }
+      })
+    }).then(function (r) {
+      if (!r.ok) throw new Error("route " + r.status);
+      return r.json();
+    }).then(function (d) {
+      var leg = d.trip.legs[0], s = d.trip.summary;
+      drawRoute(decodePolyline(leg.shape, 6));
+      mapNote("Walking route to " + v.n + " — " + fmtDist(s.length * 1000) +
+              ", " + fmtMins(Math.max(1, Math.round(s.time / 60))) + " on foot.");
+    }).catch(function () {
+      clearRoute();
+      mapNote("Couldn’t fetch a route from where you are. The distance and the " +
+              "Google Maps button both still work.");
+    });
+  }, 0);
+}
+
 function showOnMap(idx) {
   setView("map");
   var go = function () {
@@ -321,7 +403,7 @@ function showOnMap(idx) {
     cluster.zoomToShowLayer(m, function () { m.openPopup(); });
   };
   // let the tab become visible so Leaflet can measure itself first
-  requestAnimationFrame(function () { map.invalidateSize(); go(); });
+  setTimeout(function () { map.invalidateSize(); go(); }, 0);
 }
 
 /* --------------------------------------------------------------- render --- */
@@ -343,7 +425,7 @@ function setView(v) {
   if (v === "map") {
     if (!map) buildMap();
     render();
-    requestAnimationFrame(function () { map.invalidateSize(); });
+    setTimeout(function () { map.invalidateSize(); }, 0);
   } else {
     render();
   }
@@ -370,8 +452,17 @@ document.getElementById("q").addEventListener("input", function (e) {
   render();
 });
 document.getElementById("results").addEventListener("click", function (e) {
-  var btn = e.target.closest(".show-map");
-  if (btn) showOnMap(Number(btn.dataset.idx));
+  var show = e.target.closest(".show-map");
+  if (show) { showOnMap(Number(show.dataset.idx)); return; }
+  var route = e.target.closest(".route-btn");
+  if (route) showRoute(Number(route.dataset.route));
+});
+// the same Route button also appears inside map popups
+document.getElementById("map").addEventListener("click", function (e) {
+  var route = e.target.closest(".route-btn");
+  if (!route) return;
+  e.stopPropagation();
+  showRoute(Number(route.dataset.route));
 });
 
 /* ---------------------------------------------------------- geolocation --- */
