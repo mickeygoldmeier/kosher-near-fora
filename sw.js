@@ -3,7 +3,7 @@
  * Vendored: Leaflet 1.9.4, leaflet.markercluster 1.5.3.
  * BUMP SHELL ON EVERY DEPLOY — it is what replaces the cached app.
  */
-var SHELL = "knf-shell-v2";
+var SHELL = "knf-shell-v3";
 var TILES = "knf-tiles-v1";          // never bumped; self-trimming
 
 var TILE_HOSTS  = ["tiles.stadiamaps.com", "basemaps.cartocdn.com"];
@@ -54,6 +54,14 @@ self.addEventListener("activate", function (e) {
 
 function isTile(url) { return TILE_HOSTS.indexOf(url.hostname) !== -1; }
 
+/* 1x1 transparent PNG, served in place of a provider's error tile. */
+var BLANK_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+function blankTile() {
+  var bin = atob(BLANK_PNG), bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Response(bytes, { status: 200, headers: { "Content-Type": "image/png" } });
+}
+
 /* Trim lazily. cache.keys() on every put is O(n) per tile and stutters panning. */
 var putsSinceTrim = 0;
 function trimSoon(cache) {
@@ -76,6 +84,10 @@ function handleTile(request) {
       // Pass the ORIGINAL request through: rebuilding it drops the referrer and
       // Stadia's domain auth then 401s every tile.
       return fetch(request).then(function (res) {
+        // An unauthorised tile server answers 401 with a valid PNG that reads
+        // "401 Invalid Authentication". Left alone it renders as a grid of error
+        // tiles, so swap it for a blank one and let the page explain instead.
+        if (res.type !== "opaque" && res.status !== 200) return blankTile();
         // crossOrigin:'anonymous' on the layer means these are CORS, not opaque,
         // so status is readable and we never cache a 401 as if it were a tile.
         if (res.type !== "opaque" && res.status === 200) {

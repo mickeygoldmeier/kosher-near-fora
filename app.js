@@ -223,6 +223,22 @@ function mapNote(msg) {
   el.classList.add("show");
 }
 
+var TILE_FAIL_MSG = "Map tiles aren’t loading, so the map may be blank or show placeholder squares. " +
+  "Everything else — the list, the distances and the kashrut links — still works.";
+
+/* An unauthorised tile server does not fail the way you would hope: Stadia
+   answers 401 with a perfectly valid 512×512 PNG that says "401 Invalid
+   Authentication". An <img> renders it happily, so Leaflet reports tileload,
+   not tileerror, and the user gets a grid of error tiles with no explanation.
+   Read one tile's real status instead. */
+function probeTiles() {
+  var url = tileUrl()
+    .replace("{z}", "13").replace("{x}", "4092").replace("{y}", "2723").replace("{r}", "");
+  fetch(url, { mode: "cors", cache: "no-store" })
+    .then(function (r) { if (!r.ok) mapNote(TILE_FAIL_MSG); })
+    .catch(function () { /* offline: cached tiles may still be fine, say nothing */ });
+}
+
 function buildMap() {
   map = L.map("map", { zoomControl: true, attributionControl: true, tap: true });
 
@@ -233,14 +249,9 @@ function buildMap() {
   }).addTo(map);
 
   tileLayer.on("tileerror", function () {
-    if (++tileErrors === 8) {
-      mapNote("Map tiles aren’t loading — the list, distances and links all still work. " +
-              "If this is the live site, the domain may not be allowlisted with the tile provider yet.");
-    }
+    if (++tileErrors === 8) mapNote(TILE_FAIL_MSG);
   });
-  tileLayer.on("tileload", function () {
-    if (tileErrors) { tileErrors = 0; mapNote(""); }
-  });
+  probeTiles();
 
   darkMQ.addEventListener("change", function () { tileLayer.setUrl(tileUrl()); });
 

@@ -71,9 +71,23 @@ and update `wd`/`wt`.
 Tiles come from **Stadia Maps**, using their light (`alidade_smooth`) and dark
 (`alidade_smooth_dark`) styles, switched to match the system theme.
 
-Stadia uses **domain-based authentication**, so there is no API key in this repository. The deploy
-domain must be added to the property allowlist in the Stadia dashboard or tiles will not load.
-`localhost` is exempt, so local development works with no setup.
+Stadia uses **domain-based authentication**, so there is no API key in this repository.
+
+**The deploy domain must be allowlisted in the Stadia dashboard or tiles will not load.**
+`localhost` is exempt, which is why local development needs no setup — and which makes this easy to
+miss: browsers share their HTTP cache across origins, so tiles fetched while testing on localhost can
+make the deployed site *look* like it works. Verify with a cache-busting request instead:
+
+```js
+fetch('https://tiles.stadiamaps.com/tiles/alidade_smooth/13/4092/2723@2x.png?cb=' + Math.random())
+  .then(r => console.log(r.status))   // 200 = allowlisted, 401 = not
+```
+
+An unauthorised request does **not** fail cleanly: Stadia answers `401` with a valid 512x512 PNG
+reading "401 Invalid Authentication". An `<img>` renders it, so Leaflet reports `tileload`, not
+`tileerror`. The app therefore probes one tile's real HTTP status at startup, and the service worker
+substitutes a blank tile for any non-200, so a misconfigured deploy shows an explanation rather than a
+grid of error tiles.
 
 Required attribution (rendered on the map, do not remove — it is a licence term):
 
